@@ -15,6 +15,7 @@ import BottomSheet, {
   BottomSheetModalProvider,
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
+import { NumericFormat } from "react-number-format";
 
 const { width, height } = Dimensions.get("window");
 
@@ -94,17 +95,27 @@ export default function AddScreen() {
         />
 
         <GestureHandlerRootView style={styles.container}>
-          <ThemedView>
-            <ThemedText>{`${width} - ${height}`}</ThemedText>
-            <ThemedText>{code.join(", ")}</ThemedText>
-          </ThemedView>
-
           <ThemedView style={styles.bottomContainer}>
-            <ThemedView style={styles.rowContainer}>
-              <TouchableOpacity>
-                <Ionicons name="arrow-back" size={45} color="#5E454B" />
-              </TouchableOpacity>
+            <ThemedView
+              style={{
+                flex: 1,
+                height: width * 0.5,
+                alignItems: "center",
+              }}
+            >
+              <NumericFormat
+                value={
+                  code.length > 0
+                    ? code.reduce((acc, curr) => acc + curr.toString(), "")
+                    : 0
+                }
+                type="text"
+                thousandSeparator={true}
+                customInput={(props) => <ThemedText>{props.value}</ThemedText>}
+              />
+            </ThemedView>
 
+            <ThemedView style={styles.rowContainer}>
               <Button
                 onPress={() => {
                   handleSnapPress(0);
@@ -113,9 +124,7 @@ export default function AddScreen() {
                 Category
               </Button>
 
-              <Button mode="contained" onPress={() => {}}>
-                Save
-              </Button>
+              <Button onPress={() => {}}>Save</Button>
             </ThemedView>
 
             <DialpadKeypad
@@ -173,6 +182,7 @@ const styles = StyleSheet.create({
     borderColor: "#0e0e0e",
     alignItems: "center",
     justifyContent: "space-between",
+    backgroundColor: "#f0f0f0",
   },
   sheetContent: {
     backgroundColor: "white",
